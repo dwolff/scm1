@@ -1,22 +1,85 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws: https: 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *"> -->
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
         <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
         <title>Hello World</title>
+        <style type="text/css">
+          .imgCamera {
+            width:400px;
+            border:1px solid #ccc;
+            padding:5px;
+            display:none;
+          }
+        </style>
     </head>
     <body>
-        <div class="app">
+        <div class="app jumbotron">
             <h1>IFRS Osorio</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Conectando</p>
-                <p class="event received">Aplicativo OK</p>
-            </div>
+            <img src="img/logo.png" />
+            <br />
+            <p class="event"><button class="btn btn-lg btn-success" id="testCamera">Testar camera</button></p>
+            <img class="imgCamera" id="cameraCaptured" />
+
+            <label for="inputNumber">Informe um numero:</label>
+            <input id="inputNumber" name="inputNumber" class="input-lg" type="number" min="1" max="10" value="2" />
+
+            <label for="inputNumber2">Informe outro numero:</label>
+            <input id="inputNumber2" name="inputNumber2" class="input-lg" type="number" min="1" max="10" value="2" />
+
+            <br />
+
+            <button class="btn btn-lg btn-success" id="btnCalcular">Calcular</button>
+
+            <br />
+            <br />
+
+            <div>Resultado: <span id="spanResultado"></span></div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $("#btnCalcular").click(function(e) {
+              e.preventDefault();
+
+              var resultado = calculaNumero(new Number($("#inputNumber").val()), new Number($("#inputNumber2").val()))
+              $("#spanResultado").html(resultado);
+            });
+
+            calculaNumero = function(num1, num2) {
+              return num1 + num2;
+            };
+
+            $("#testCamera").click(function(e) {
+              // activate the camera.
+              e.preventDefault();
+
+              var options = {
+                destinationType: Camera.DestinationType.DATA_URL,
+                correctOrientation: true,
+                targetWidth: 800,
+                targetHeight: 450
+              };
+
+              gotPicture = function(imageData) {
+                $("#cameraCaptured").attr("src", "data:image/jpeg;base64," + imageData).show();
+              };
+
+              gotError = function(message) {
+                alert(message);
+              };
+
+              navigator.camera.getPicture(gotPicture, gotError, options);
+            });
+          });
+        </script>
     </body>
 </html>
