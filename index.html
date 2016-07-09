@@ -47,20 +47,24 @@
         <script type="text/javascript" src="cordova.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/calculaNumero.js"></script>
  	<script type="text/javascript" src="js/qunit.js"></script>
 	<script type="text/javascript" src="tests/test_calculaNumero.js"></script>
         <script type="text/javascript">
           $(document).ready(function() {
+	    var production = false;
+
+	    if (production) {
+		$("#qunit").hide();
+		$("#qunit-fixture").hide();
+	    }
+
             $("#btnCalcular").click(function(e) {
               e.preventDefault();
 
               var resultado = calculaNumero(new Number($("#inputNumber").val()), new Number($("#inputNumber2").val()))
               $("#spanResultado").html(resultado);
             });
-
-            calculaNumero = function(num1, num2) {
-              return num1 + num2;
-            };
 
             $("#testCamera").click(function(e) {
               // activate the camera.
